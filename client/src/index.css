@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #f6eee3; /* boop-cream */
+  background-color: white;
   color: #333; /* Dark Brown/Charcoal approximation */
   font-family: 'Quicksand', sans-serif;
 }

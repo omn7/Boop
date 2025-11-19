@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Heart, Trash2 } from 'lucide-react'; // Using Heart as a base, but styled as a nose/boop
+import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
   const [isBooped, setIsBooped] = useState(false);
+  const navigate = useNavigate();
 
   const handleBoop = () => {
     setIsBooped(true);
@@ -11,17 +13,32 @@ const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
     setTimeout(() => setIsBooped(false), 300);
   };
 
+  const handleProfileClick = () => {
+    if (post.username) {
+      navigate(`/u/${post.username}`);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-6 border border-boop-brown/10">
       {/* Header */}
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold">
-            {post.petName[0]}
+        <div 
+          className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={handleProfileClick}
+        >
+          <div className="w-10 h-10 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold overflow-hidden border border-boop-brown/10">
+            {post.authorAvatar ? (
+              <img src={post.authorAvatar} alt={post.petName} className="w-full h-full object-cover" />
+            ) : (
+              post.petName[0]
+            )}
           </div>
           <div>
-            <h3 className="font-bold text-gray-800">{post.petName}</h3>
-            <p className="text-xs text-gray-500">{post.breed} • {post.humanName}'s Human</p>
+            <h3 className="font-bold text-gray-800 hover:text-boop-brown transition-colors">{post.petName}</h3>
+            <p className="text-xs text-gray-500">
+              {post.username ? `@${post.username}` : post.breed} • {post.humanName}'s Human
+            </p>
           </div>
         </div>
         

@@ -36,7 +36,7 @@ function App() {
   // Fetch posts
   const fetchPosts = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: postsData, error } = await supabase
         .from('posts')
         .select('*')
         .order('created_at', { ascending: false });
@@ -45,19 +45,41 @@ function App() {
 
       setTableError(false);
 
+      // Fetch author profiles
+      const userIds = [...new Set(postsData.map(p => p.user_id).filter(Boolean))];
+      let profilesMap = {};
+      
+      if (userIds.length > 0) {
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .in('id', userIds);
+        
+        if (!profilesError && profilesData) {
+          profilesData.forEach(p => {
+            profilesMap[p.id] = p;
+          });
+        }
+      }
+
       // Map snake_case DB columns to camelCase for components if needed, 
       // or just ensure we use the right keys. 
       // Let's map them to match our existing component expectations.
-      const formattedPosts = data.map(post => ({
-        _id: post.id,
-        userId: post.user_id, // Added userId
-        petName: post.pet_name,
-        breed: post.breed,
-        humanName: post.human_name,
-        bio: post.bio,
-        imageUrl: post.image_url,
-        boopCount: post.boop_count
-      }));
+      const formattedPosts = postsData.map(post => {
+        const author = profilesMap[post.user_id] || {};
+        return {
+          _id: post.id,
+          userId: post.user_id, // Added userId
+          username: author.username, // Added username
+          authorAvatar: author.avatar_url, // Added avatar
+          petName: post.pet_name,
+          breed: post.breed,
+          humanName: post.human_name,
+          bio: post.bio,
+          imageUrl: post.image_url,
+          boopCount: post.boop_count
+        };
+      });
 
       setPosts(formattedPosts);
     } catch (error) {
@@ -93,10 +115,10 @@ function App() {
   // Handle Boop
   const handleBoop = async (id) => {
     try {
-      // 1. Get current count
+      // 1. Get current count and user_id
       const { data: currentPost, error: fetchError } = await supabase
         .from('posts')
-        .select('boop_count')
+        .select('boop_count, user_id')
         .eq('id', id)
         .single();
       
@@ -112,6 +134,19 @@ function App() {
         .eq('id', id);
 
       if (updateError) throw updateError;
+
+      // 4. Send Notification (if not booping own post)
+      if (currentPost.user_id !== session.user.id) {
+        await supabase
+          .from('notifications')
+          .insert([{
+            type: 'boop',
+            sender_id: session.user.id,
+            recipient_id: currentPost.user_id,
+            post_id: id,
+            read: false
+          }]);
+      }
       
       // Optimistic update or re-fetch
       setPosts(posts.map(post => 
@@ -285,10 +320,12 @@ create trigger on_auth_user_created
   }
 
   return (
-    <div className="min-h-screen bg-boop-cream font-sans text-gray-800">
+    <div className="min-h-screen bg-white font-sans text-gray-800">
       <Navbar 
+        session={session}
         onNewPostClick={() => setIsModalOpen(true)} 
         onSignOut={handleSignOut}
+        userProfile={userProfile}
       />
       
       <main>
@@ -305,6 +342,7 @@ create trigger on_auth_user_created
             } 
           />
           <Route path="/profile" element={<Profile session={session} />} />
+          <Route path="/u/:username" element={<Profile session={session} />} />
         </Routes>
       </main>
 

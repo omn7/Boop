@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'boop-brown': '#996a56',
-        'boop-cream': '#f6eee3',
+        'boop-brown': '#6B4996', // Purple
+        'boop-cream': '#EEA100', // Orange
       },
       fontFamily: {
         sans: ['Quicksand', 'sans-serif'],
