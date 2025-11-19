@@ -2,7 +2,9 @@
 
 Boop is a modern social media platform designed exclusively for pets and their humans. Share adorable moments, connect with other furry friends, and join a community of pet lovers.
 
-![Boop Banner](screenshots/auth.png)
+<p align="center">
+  <img src="screenshots/auth.png" alt="Boop Banner" width="100%">
+</p>
 
 ## ✨ Features
 
@@ -17,16 +19,16 @@ Boop is a modern social media platform designed exclusively for pets and their h
 ## 📸 Screenshots
 
 ### Feed (Dark Mode)
-![Feed Dark](screenshots/feed-dark.png)
+<img src="screenshots/feed-dark.png" alt="Feed Dark" width="800">
 
 ### Feed (Light Mode)
-![Feed Light](screenshots/feed-light.png)
+<img src="screenshots/feed-light.png" alt="Feed Light" width="800">
 
 ### User Profile
-![Profile](screenshots/profile.png)
+<img src="screenshots/profile.png" alt="Profile" width="800">
 
 ### Authentication
-![Login](screenshots/auth.png)
+<img src="screenshots/auth.png" alt="Login" width="800">
 
 ## 🛠️ Tech Stack
 
