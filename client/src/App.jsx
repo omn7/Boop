@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import Feed from './components/Feed';
 import Auth from './components/Auth';
 import Profile from './components/Profile';
+import SinglePost from './components/SinglePost';
 import { X } from 'lucide-react';
 import { supabase } from './supabaseClient';
 
@@ -20,6 +22,17 @@ function App() {
   });
   const navigate = useNavigate();
 
+  // Helper to update meta theme-color
+  const updateMetaThemeColor = (color) => {
+    let meta = document.querySelector("meta[name='theme-color']");
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    meta.content = color;
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -27,6 +40,23 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+  // Manage global background colors and theme-color for overscroll/mobile bars
+  useEffect(() => {
+    if (!session) {
+      // Auth Page: Orange theme
+      document.body.style.backgroundColor = '#EEA100';
+      document.documentElement.style.backgroundColor = '#EEA100';
+      updateMetaThemeColor('#EEA100');
+    } else {
+      // Logged In: Let CSS handle body/html bg (white/black)
+      document.body.style.backgroundColor = '';
+      document.documentElement.style.backgroundColor = '';
+      
+      // Update meta tag based on dark mode
+      updateMetaThemeColor(darkMode ? '#000000' : '#ffffff');
+    }
+  }, [session, darkMode]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -343,23 +373,37 @@ create trigger on_auth_user_created
         toggleDarkMode={toggleDarkMode}
       />
       
-      <main>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <Feed 
-                posts={posts} 
-                onBoop={handleBoop} 
-                onDelete={handleDeletePost}
-                currentUserId={session?.user?.id}
-              />
-            } 
-          />
-          <Route path="/profile" element={<Profile session={session} />} />
-          <Route path="/u/:username" element={<Profile session={session} />} />
-        </Routes>
-      </main>
+      <div className="flex max-w-7xl mx-auto w-full">
+        <Sidebar />
+        <main className="flex-1 min-w-0">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <Feed 
+                  posts={posts} 
+                  onBoop={handleBoop} 
+                  onDelete={handleDeletePost}
+                  currentUserId={session?.user?.id}
+                  session={session}
+                />
+              } 
+            />
+            <Route path="/profile" element={<Profile session={session} />} />
+            <Route path="/u/:username" element={<Profile session={session} />} />
+            <Route 
+              path="/post/:postId" 
+              element={
+                <SinglePost 
+                  session={session} 
+                  onBoop={handleBoop} 
+                  onDelete={handleDeletePost} 
+                />
+              } 
+            />
+          </Routes>
+        </main>
+      </div>
 
       {/* Upload Modal */}
       {isModalOpen && (

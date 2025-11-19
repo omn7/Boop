@@ -1,7 +1,7 @@
 import React from 'react';
 import PostCard from './PostCard';
 
-const Feed = ({ posts, onBoop, onDelete, currentUserId }) => {
+const Feed = ({ posts, onBoop, onDelete, currentUserId, session }) => {
   if (!posts || posts.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500 dark:text-gray-400">
@@ -19,6 +19,7 @@ const Feed = ({ posts, onBoop, onDelete, currentUserId }) => {
           onBoop={onBoop} 
           onDelete={onDelete}
           isOwner={currentUserId && post.userId === currentUserId}
+          session={session}
         />
       ))}
     </div>
