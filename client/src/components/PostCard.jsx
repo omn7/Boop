@@ -20,7 +20,7 @@ const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-6 border border-boop-brown/10">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm overflow-hidden mb-6 border border-boop-brown/10 dark:border-gray-800 transition-colors duration-300">
       {/* Header */}
       <div className="p-4 flex items-center justify-between">
         <div 
@@ -35,8 +35,8 @@ const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
             )}
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 hover:text-boop-brown transition-colors">{post.petName}</h3>
-            <p className="text-xs text-gray-500">
+            <h3 className="font-bold text-gray-800 dark:text-gray-100 hover:text-boop-brown transition-colors">{post.petName}</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {post.username ? `@${post.username}` : post.breed} • {post.humanName}'s Human
             </p>
           </div>
@@ -54,10 +54,10 @@ const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
       </div>
 
       {/* Image */}
-      <div className="aspect-square w-full bg-gray-100 relative">
+      <div className="aspect-square w-full bg-gray-100 dark:bg-black relative">
         <img 
           src={post.imageUrl} 
-          alt={post.petName} 
+          alt={post.petName}  
           className="w-full h-full object-cover"
           loading="lazy"
         />
@@ -72,19 +72,19 @@ const PostCard = ({ post, onBoop, onDelete, isOwner }) => {
               flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 font-bold border-2
               ${isBooped 
                 ? 'bg-boop-brown text-white border-boop-brown scale-105' 
-                : 'bg-transparent text-boop-brown border-boop-brown hover:bg-boop-cream'
+                : 'bg-transparent text-boop-brown dark:text-boop-cream border-boop-brown dark:border-boop-cream hover:bg-boop-cream dark:hover:bg-zinc-800'
               }
             `}
           >
-            <div className={`w-4 h-4 rounded-full ${isBooped ? 'bg-white' : 'bg-boop-brown'}`}></div>
+            <div className={`w-4 h-4 rounded-full ${isBooped ? 'bg-white' : 'bg-boop-brown dark:bg-boop-cream'}`}></div>
             Boop!
           </button>
-          <span className="font-bold text-gray-700">
+          <span className="font-bold text-gray-700 dark:text-gray-300">
             {post.boopCount} Boops
           </span>
         </div>
 
-        <p className="text-gray-800">
+        <p className="text-gray-800 dark:text-gray-200">
           <span className="font-bold mr-2">{post.petName}</span>
           {post.bio}
         </p>

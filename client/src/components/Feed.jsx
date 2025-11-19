@@ -4,7 +4,7 @@ import PostCard from './PostCard';
 const Feed = ({ posts, onBoop, onDelete, currentUserId }) => {
   if (!posts || posts.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-500">
+      <div className="text-center py-10 text-gray-500 dark:text-gray-400">
         <p>No pets to boop yet! Be the first to post.</p>
       </div>
     );

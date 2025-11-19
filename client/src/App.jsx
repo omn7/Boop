@@ -13,11 +13,24 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tableError, setTableError] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [newPost, setNewPost] = useState({
     bio: '',
     imageUrl: ''
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -320,12 +333,14 @@ create trigger on_auth_user_created
   }
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-800">
+    <div className={`min-h-screen font-sans text-gray-800 dark:text-gray-100 bg-white dark:bg-black transition-colors duration-300`}>
       <Navbar 
         session={session}
         onNewPostClick={() => setIsModalOpen(true)} 
         onSignOut={handleSignOut}
         userProfile={userProfile}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
       />
       
       <main>

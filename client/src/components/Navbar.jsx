@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { PawPrint, PlusSquare, LogOut, User, Search, Bell, Home } from 'lucide-react';
+import { PawPrint, PlusSquare, LogOut, User, Search, Bell, Home, Dog } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
-const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
+const Navbar = ({ session, onNewPostClick, onSignOut, userProfile, darkMode, toggleDarkMode }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -113,17 +113,17 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
 
   const NotificationList = () => (
     <>
-      <div className="p-3 border-b border-gray-100 font-bold text-boop-brown text-sm">
+      <div className="p-3 border-b border-gray-100 dark:border-gray-800 font-bold text-boop-brown text-sm dark:text-boop-cream">
         Notifications
       </div>
-      <div className="max-h-80 overflow-y-auto">
+      <div className="max-h-80 overflow-y-auto bg-white dark:bg-zinc-900">
         {notifications.length === 0 ? (
-          <p className="text-center text-gray-500 py-6 text-sm">No notifications yet.</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 py-6 text-sm">No notifications yet.</p>
         ) : (
           notifications.map((notification) => (
             <div 
               key={notification.id}
-              className={`p-3 hover:bg-boop-cream transition-colors flex gap-3 items-start ${!notification.read ? 'bg-boop-cream/30' : ''}`}
+              className={`p-3 hover:bg-boop-cream dark:hover:bg-zinc-800 transition-colors flex gap-3 items-start ${!notification.read ? 'bg-boop-cream/30 dark:bg-zinc-800/50' : ''}`}
             >
               <div className="w-8 h-8 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold text-xs overflow-hidden shrink-0">
                 {notification.sender?.avatar_url ? (
@@ -133,7 +133,7 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                 )}
               </div>
               <div className="text-sm">
-                <p className="text-gray-800">
+                <p className="text-gray-800 dark:text-gray-200">
                   <span className="font-bold">{notification.sender?.pet_name || 'Someone'}</span>
                   {notification.type === 'follow' ? ' started following you.' : ' booped your post!'}
                 </p>
@@ -158,7 +158,7 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
             setSearchQuery('');
             setSearchResults([]);
           }}
-          className="p-3 hover:bg-boop-cream cursor-pointer flex items-center gap-3 transition-colors"
+          className="p-3 hover:bg-boop-cream dark:hover:bg-zinc-800 cursor-pointer flex items-center gap-3 transition-colors bg-white dark:bg-zinc-900"
         >
           <div className="w-8 h-8 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold text-xs overflow-hidden">
             {result.avatar_url ? (
@@ -168,8 +168,8 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
             )}
           </div>
           <div>
-            <p className="font-bold text-sm text-gray-800">{result.pet_name}</p>
-            <p className="text-xs text-gray-500">@{result.username}</p>
+            <p className="font-bold text-sm text-gray-800 dark:text-gray-200">{result.pet_name}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">@{result.username}</p>
           </div>
         </div>
       ))}
@@ -177,11 +177,11 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
   );
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-boop-brown font-bold text-2xl cursor-pointer shrink-0">
+        <Link to="/" className="flex items-center gap-2 text-boop-brown dark:text-boop-cream font-bold text-2xl cursor-pointer shrink-0">
           <PawPrint size={32} />
           <span className="hidden sm:inline">Boop</span>
         </Link>
@@ -197,12 +197,12 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                     placeholder="Search Boop" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border-none rounded-full leading-5 bg-gray-100 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-boop-brown sm:text-sm transition-colors"
+                    className="block w-full pl-10 pr-3 py-2 border-none rounded-full leading-5 bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-boop-brown sm:text-sm transition-colors"
                 />
             </div>
             {/* Search Results Dropdown */}
             {searchResults.length > 0 && (
-                <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                <div className="absolute top-full left-0 w-full mt-1 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden z-50">
                   <SearchResultsList />
                 </div>
             )}
@@ -213,7 +213,16 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
             
             {/* Desktop Links */}
             <div className="hidden md:flex items-center gap-4">
-                <Link to="/" className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors" title="Home">
+                <button
+                  onClick={toggleDarkMode}
+                  className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full transition-colors"
+                  title={darkMode ? "Wake up!" : "Sleep time!"}
+                >
+                  <Dog size={24} className={`transition-transform duration-300 ${darkMode ? 'rotate-12 text-indigo-400' : 'text-orange-500'}`} />
+                  <span className="font-medium hidden md:inline">{darkMode ? 'Dark' : 'Light'}</span>
+                </button>
+
+                <Link to="/" className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full transition-colors" title="Home">
                     <Home size={24} />
                 </Link>
                 
@@ -223,16 +232,16 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                             setShowNotifications(!showNotifications);
                             if (!showNotifications) markAsRead();
                         }}
-                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors relative"
+                        className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full transition-colors relative"
                         title="Notifications"
                     >
                         <Bell size={24} />
                         {unreadCount > 0 && (
-                            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
                         )}
                     </button>
                     {showNotifications && (
-                        <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                        <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden z-50">
                             <NotificationList />
                         </div>
                     )}
@@ -249,7 +258,7 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                 <div className="relative">
                     <button 
                         onClick={() => setShowProfileMenu(!showProfileMenu)}
-                        className="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        className="flex items-center gap-2 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                     >
                         <div className="w-8 h-8 bg-boop-brown rounded-full flex items-center justify-center text-white font-bold overflow-hidden">
                             {userProfile?.avatar_url ? (
@@ -261,10 +270,10 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                     </button>
                     {/* Dropdown Menu */}
                     {showProfileMenu && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden z-50">
                             <Link 
                                 to="/profile" 
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center gap-2"
                                 onClick={() => setShowProfileMenu(false)}
                             >
                                 <User size={16} /> Profile
@@ -274,7 +283,7 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                                     setShowProfileMenu(false);
                                     onSignOut();
                                 }}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center gap-2"
                             >
                                 <LogOut size={16} /> Sign Out
                             </button>
@@ -285,9 +294,15 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
 
             {/* Mobile Actions (Simplified) */}
             <div className="md:hidden flex items-center gap-2">
+                 <button
+                    onClick={toggleDarkMode}
+                    className="p-2 text-boop-brown dark:text-boop-cream hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full"
+                 >
+                    <Dog size={24} className={darkMode ? 'text-indigo-400' : 'text-orange-500'} />
+                 </button>
                  <button 
                     onClick={onNewPostClick}
-                    className="p-2 text-boop-brown hover:bg-gray-100 rounded-full"
+                    className="p-2 text-boop-brown dark:text-boop-cream hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full"
                 >
                     <PlusSquare size={24} />
                 </button>
@@ -297,20 +312,20 @@ const Navbar = ({ session, onNewPostClick, onSignOut, userProfile }) => {
                         setShowNotifications(!showNotifications);
                         if (!showNotifications) markAsRead();
                       }}
-                      className="p-2 text-boop-brown hover:bg-gray-100 rounded-full relative"
+                      className="p-2 text-boop-brown dark:text-boop-cream hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full relative"
                     >
                       <Bell size={24} />
                       {unreadCount > 0 && (
-                        <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                        <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
                       )}
                     </button>
                      {showNotifications && (
-                        <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                        <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden z-50">
                             <NotificationList />
                         </div>
                     )}
                 </div>
-                <Link to="/profile" className="p-2 text-boop-brown hover:bg-gray-100 rounded-full">
+                <Link to="/profile" className="p-2 text-boop-brown dark:text-boop-cream hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full">
                     <User size={24} />
                 </Link>
             </div>

@@ -281,10 +281,10 @@ export default function Profile({ session }) {
   return (
     <div className="max-w-2xl mx-auto p-4">
       {/* Profile Header Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-boop-brown/10 overflow-hidden mb-6">
+      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-boop-brown/10 dark:border-gray-800 overflow-hidden mb-6 transition-colors duration-300">
         <div className="p-6 flex flex-col sm:flex-row items-center gap-6">
           {/* Avatar */}
-          <div className="w-24 h-24 bg-boop-cream rounded-full flex items-center justify-center text-4xl border-4 border-white shadow-lg text-boop-brown overflow-hidden shrink-0">
+          <div className="w-24 h-24 bg-boop-cream rounded-full flex items-center justify-center text-4xl border-4 border-white dark:border-zinc-800 shadow-lg text-boop-brown overflow-hidden shrink-0">
             {profile.avatar_url ? (
               <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
             ) : (
@@ -296,13 +296,13 @@ export default function Profile({ session }) {
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-2">
               <div>
-                <h1 className="text-2xl font-bold text-boop-brown">{profile.pet_name || 'New Pet'}</h1>
-                <p className="text-gray-500 text-sm">@{profile.username || 'no_username'} • {profile.breed} • {profile.human_name}'s Human</p>
+                <h1 className="text-2xl font-bold text-boop-brown dark:text-boop-cream">{profile.pet_name || 'New Pet'}</h1>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">@{profile.username || 'no_username'} • {profile.breed} • {profile.human_name}'s Human</p>
               </div>
               {isOwnProfile && !isEditing && (
                 <button 
                   onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 border border-boop-brown text-boop-brown rounded-full text-sm font-bold hover:bg-boop-cream transition-colors flex items-center gap-2"
+                  className="px-4 py-2 border border-boop-brown dark:border-boop-cream text-boop-brown dark:text-boop-cream rounded-full text-sm font-bold hover:bg-boop-cream dark:hover:bg-zinc-800 transition-colors flex items-center gap-2"
                 >
                   <Edit2 size={16} />
                   Edit Profile
@@ -315,7 +315,7 @@ export default function Profile({ session }) {
                   onMouseLeave={(e) => isFollowing && (e.target.innerText = "Following")}
                   className={`px-6 py-2 rounded-full text-sm font-bold transition-all w-32 ${
                     isFollowing 
-                      ? 'bg-white border-2 border-gray-200 text-gray-800 hover:border-red-200 hover:text-red-500 hover:bg-red-50' 
+                      ? 'bg-white dark:bg-zinc-800 border-2 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:border-red-200 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20' 
                       : 'bg-boop-brown text-white hover:bg-opacity-90 border-2 border-transparent'
                   }`}
                 >
@@ -324,27 +324,27 @@ export default function Profile({ session }) {
               )}
             </div>
             
-            <p className="text-gray-700 mt-2">{profile.bio || 'No bio yet.'}</p>
+            <p className="text-gray-700 dark:text-gray-300 mt-2">{profile.bio || 'No bio yet.'}</p>
 
             {/* Stats */}
-            <div className="flex items-center justify-center sm:justify-start gap-6 mt-4 pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-center sm:justify-start gap-6 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
               <div className="text-center">
-                <span className="block font-bold text-lg text-gray-800">{userPosts.length}</span>
-                <span className="text-xs text-gray-500 uppercase tracking-wide">Posts</span>
+                <span className="block font-bold text-lg text-gray-800 dark:text-gray-200">{userPosts.length}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Posts</span>
               </div>
               <button 
                 onClick={fetchFollowersList}
-                className="text-center hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors cursor-pointer"
+                className="text-center hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-lg px-2 -mx-2 transition-colors cursor-pointer"
               >
-                <span className="block font-bold text-lg text-gray-800">{followersCount}</span>
-                <span className="text-xs text-gray-500 uppercase tracking-wide">Followers</span>
+                <span className="block font-bold text-lg text-gray-800 dark:text-gray-200">{followersCount}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Followers</span>
               </button>
               <button 
                 onClick={fetchFollowingList}
-                className="text-center hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors cursor-pointer"
+                className="text-center hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-lg px-2 -mx-2 transition-colors cursor-pointer"
               >
-                <span className="block font-bold text-lg text-gray-800">{followingCount}</span>
-                <span className="text-xs text-gray-500 uppercase tracking-wide">Following</span>
+                <span className="block font-bold text-lg text-gray-800 dark:text-gray-200">{followingCount}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Following</span>
               </button>
             </div>
           </div>
@@ -353,12 +353,12 @@ export default function Profile({ session }) {
         {/* Followers Modal */}
         {showFollowersModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl w-full max-w-sm max-h-[80vh] flex flex-col shadow-xl relative">
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-bold text-lg text-boop-brown">Followers</h3>
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm max-h-[80vh] flex flex-col shadow-xl relative border border-gray-200 dark:border-gray-800">
+              <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                <h3 className="font-bold text-lg text-boop-brown dark:text-boop-cream">Followers</h3>
                 <button 
                   onClick={() => setShowFollowersModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <X size={24} />
                 </button>
@@ -366,7 +366,7 @@ export default function Profile({ session }) {
               
               <div className="overflow-y-auto p-2">
                 {followersList.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">No followers yet.</p>
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-8">No followers yet.</p>
                 ) : (
                   followersList.map((follower) => (
                     <div 
@@ -375,7 +375,7 @@ export default function Profile({ session }) {
                         navigate(follower.username ? `/u/${follower.username}` : '/');
                         setShowFollowersModal(false);
                       }}
-                      className="flex items-center gap-3 p-3 hover:bg-boop-cream rounded-xl cursor-pointer transition-colors"
+                      className="flex items-center gap-3 p-3 hover:bg-boop-cream dark:hover:bg-zinc-800 rounded-xl cursor-pointer transition-colors"
                     >
                       <div className="w-10 h-10 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold overflow-hidden border border-boop-brown/10">
                         {follower.avatar_url ? (
@@ -385,8 +385,8 @@ export default function Profile({ session }) {
                         )}
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">{follower.pet_name}</p>
-                        <p className="text-xs text-gray-500">@{follower.username || 'user'}</p>
+                        <p className="font-bold text-gray-800 dark:text-gray-200">{follower.pet_name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">@{follower.username || 'user'}</p>
                       </div>
                     </div>
                   ))
@@ -399,12 +399,12 @@ export default function Profile({ session }) {
         {/* Following Modal */}
         {showFollowingModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl w-full max-w-sm max-h-[80vh] flex flex-col shadow-xl relative">
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-bold text-lg text-boop-brown">Following</h3>
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm max-h-[80vh] flex flex-col shadow-xl relative border border-gray-200 dark:border-gray-800">
+              <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                <h3 className="font-bold text-lg text-boop-brown dark:text-boop-cream">Following</h3>
                 <button 
                   onClick={() => setShowFollowingModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <X size={24} />
                 </button>
@@ -412,7 +412,7 @@ export default function Profile({ session }) {
               
               <div className="overflow-y-auto p-2">
                 {followingList.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">Not following anyone yet.</p>
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-8">Not following anyone yet.</p>
                 ) : (
                   followingList.map((following) => (
                     <div 
@@ -421,7 +421,7 @@ export default function Profile({ session }) {
                         navigate(following.username ? `/u/${following.username}` : '/');
                         setShowFollowingModal(false);
                       }}
-                      className="flex items-center gap-3 p-3 hover:bg-boop-cream rounded-xl cursor-pointer transition-colors"
+                      className="flex items-center gap-3 p-3 hover:bg-boop-cream dark:hover:bg-zinc-800 rounded-xl cursor-pointer transition-colors"
                     >
                       <div className="w-10 h-10 bg-boop-cream rounded-full flex items-center justify-center text-boop-brown font-bold overflow-hidden border border-boop-brown/10">
                         {following.avatar_url ? (
@@ -431,8 +431,8 @@ export default function Profile({ session }) {
                         )}
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">{following.pet_name}</p>
-                        <p className="text-xs text-gray-500">@{following.username || 'user'}</p>
+                        <p className="font-bold text-gray-800 dark:text-gray-200">{following.pet_name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">@{following.username || 'user'}</p>
                       </div>
                     </div>
                   ))
@@ -444,67 +444,67 @@ export default function Profile({ session }) {
 
         {/* Edit Form (Conditional) */}
         {isEditing && (
-          <div className="bg-boop-cream/30 p-6 border-t border-boop-brown/10">
-            <h3 className="font-bold text-boop-brown mb-4">Update Details</h3>
+          <div className="bg-boop-cream/30 dark:bg-zinc-800/50 p-6 border-t border-boop-brown/10 dark:border-gray-800">
+            <h3 className="font-bold text-boop-brown dark:text-boop-cream mb-4">Update Details</h3>
             <form onSubmit={updateProfile} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Username (Unique)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username (Unique)</label>
                 <input
                   type="text"
                   value={profile.username || ''}
                   onChange={(e) => setProfile({ ...profile, username: e.target.value.toLowerCase().replace(/\s/g, '') })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                   placeholder="e.g. boopster"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Pet Name</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pet Name</label>
                   <input
                     type="text"
                     value={profile.pet_name || ''}
                     onChange={(e) => setProfile({ ...profile, pet_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Breed</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Breed</label>
                   <input
                     type="text"
                     value={profile.breed || ''}
                     onChange={(e) => setProfile({ ...profile, breed: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Human's Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Human's Name</label>
                 <input
                   type="text"
                   value={profile.human_name || ''}
                   onChange={(e) => setProfile({ ...profile, human_name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
                 <textarea
                   rows="3"
                   value={profile.bio || ''}
                   onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none resize-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Avatar URL</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Avatar URL</label>
                 <input
                   type="url"
                   value={profile.avatar_url || ''}
                   onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-boop-brown outline-none bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
@@ -520,7 +520,7 @@ export default function Profile({ session }) {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-6 py-2 border border-gray-300 text-gray-600 font-bold rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 font-bold rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   Cancel
                 </button>
@@ -532,19 +532,19 @@ export default function Profile({ session }) {
 
       {/* Posts Grid */}
       <div>
-        <div className="flex items-center gap-2 mb-4 text-boop-brown font-bold text-lg">
+        <div className="flex items-center gap-2 mb-4 text-boop-brown dark:text-boop-cream font-bold text-lg">
           <Grid size={20} />
           <span>Posts</span>
         </div>
         
         {userPosts.length === 0 ? (
-          <div className="text-center py-10 bg-white rounded-2xl border border-dashed border-gray-300">
-            <p className="text-gray-500">No posts yet. Time to boop!</p>
+          <div className="text-center py-10 bg-white dark:bg-zinc-900 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+            <p className="text-gray-500 dark:text-gray-400">No posts yet. Time to boop!</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-1 sm:gap-4">
             {userPosts.map((post) => (
-              <div key={post.id} className="aspect-square bg-gray-100 rounded-lg overflow-hidden relative group">
+              <div key={post.id} className="aspect-square bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden relative group">
                 <img 
                   src={post.image_url} 
                   alt={post.pet_name} 
